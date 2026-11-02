@@ -1,153 +1,105 @@
 # RedditClean
 
-**Clean up your Reddit history.**
+**Review and clean your Reddit history, with control over what stays.**
 
-RedditClean is a Chrome extension that helps you review, edit and delete your Reddit comments and posts in bulk.
+RedditClean is a **Chrome extension (beta)** for reviewing your own Reddit comments and posts. It uses your existing signed-in session on **old.reddit.com**; you do not need Reddit API credentials or a separate RedditClean login.
 
-You can preview your history, filter by subreddit or date, and choose what to keep or remove.
+**Current version: v0.43 (beta).** This is pre-release software. Export a backup, start with a small selection, and verify the results before processing more content.
 
-RedditClean works through your existing Reddit session. No separate login or Reddit API credentials are required.
+## What RedditClean does
 
-The extension is free to use, with an optional Pro version planned as a one-time purchase.
+- **Replace comments in bulk** with a standard Markdown message. The free version **edits comments; it does not delete them**.
+- **Delete selected posts**, subject to the daily attempt allowance. Post deletion can be irreversible.
+- **Preview and select** individual items before processing, including selecting all or preserving all matching items.
+- **Filter** by included subreddits, preserved subreddits, free text contained in comments, and a from/to date range. Applying filters limits the preview to matching items. A **Filters applied** indicator shows the number of active filters and matching items; **Clear filters** appears when filters are active. Clearing filters does not reset individual preservation choices.
+- **Export a CSV backup** of discovered items locally before making changes.
+- **Manually rescan** to refresh discovered history; reopening the workspace does not intentionally start a new scan.
+- **Track processing** with a progress bar, daily allowance, average seconds per edit, ETA, and last editor-open/save-verification times.
+- **Pause, resume, and stop** processing. **Done** closes the full-screen workspace without stopping the job; **Stop** ends the job.
+- **Follow live results:** successfully replaced comments from the current processing job appear in green at the top with a **✓ Replaced this session** label. Previously replaced items are hidden by default and can be shown with the history checkbox.
 
-> **Current version: v0.16 (Beta)**
->
-> RedditClean is under development. Please back up important content and review your selections before making changes.
+### Processing sessions and history
 
-## Features
+A **session means one processing job**, not one opening of the workspace. Pausing, resuming, or closing and reopening the workspace does not create a new job. Starting a new job creates a new session.
 
-- **Bulk comment replacement:** Replace multiple Reddit comments with a standard message.
-- **Post deletion:** Delete posts from your Reddit history.
-- **Preview before cleaning:** Review comments and posts before making changes.
-- **Selective cleaning:** Choose which comments or posts to process.
-- **Subreddit filters:** Include or exclude specific subreddits.
-- **Date filters:** Clean content from a selected date range.
-- **Pause and resume:** Pause processing and continue later.
-- **CSV export:** Download a backup of your discovered Reddit history.
-- **Progress tracking:** See how many items have been processed and how many remain.
-- **Automatic pagination:** Scan multiple pages of your Reddit history.
+The preview distinguishes **Completed this session**, **Remaining selected**, and **Previously replaced**. Historical counts shown in the filtered preview can reflect the active filters and discovered items, rather than every comment ever edited on Reddit. Replacement history is stored locally in the browser and may be lost if extension storage is cleared or the extension is removed.
 
-## Free vs Pro
+## Free allowance and planned Pro
 
-RedditClean offers a free version for occasional use. A Pro version is planned for users who want to clean larger amounts of content.
+| Capability | Free (current) | Pro (planned, not available) |
+| --- | --- | --- |
+| Successful comment replacements | **51 per UTC day** | No product-side daily allowance* |
+| Post deletion attempts | **5 per UTC day** | No product-side daily allowance* |
+| Preview, filters, selection, CSV backup | Included | Planned |
+| Pause, resume, stop, progress metrics | Included | Planned |
+| Randomise comments before deletion | Not included | Planned |
+| Delete comments after replacement | Not included | Planned |
+| Pricing | Free | One-time purchase planned; no price announced |
 
-**Pro will be a one-time purchase. No subscription or recurring fees.**
+*Reddit's own rate limits and restrictions still apply. Free allowance is tracked in this browser installation, across Reddit accounts, and resets at **00:00 UTC**. Browser-local limits are not tamper-proof. Post deletion allowance counts **attempts**, not just confirmed deletions.
 
-| Feature | Free | Pro (planned) |
-|---|---|---|
-| Replace Reddit comments | 51 per day | Unlimited* |
-| Delete Reddit posts | 5 attempts per day | Unlimited* |
-| Randomise comments before deletion | — | ✓ |
-| Permanently delete comments | — | ✓ |
-| Preview comments and posts | ✓ | ✓ |
-| Select individual items | ✓ | ✓ |
-| Filter by subreddit | ✓ | ✓ |
-| Filter by date | ✓ | ✓ |
-| Exclude specific subreddits | ✓ | ✓ |
-| Pause and resume | ✓ | ✓ |
-| Export history to CSV | ✓ | ✓ |
-| Progress tracking | ✓ | ✓ |
-| Automatic pagination | ✓ | ✓ |
-| Payment | Free | One-time payment |
+## Installation (unpacked extension)
 
-\* Unlimited means no RedditClean daily allowance. Reddit's own rate limits and restrictions still apply.
+1. Download the latest RedditClean ZIP and extract it.
+2. Open Chrome and navigate to `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Select **Load unpacked** and choose the extracted `redditclean-extension` directory (the folder containing `manifest.json`).
+5. Pin RedditClean to the Chrome toolbar if convenient.
+6. Sign in to Reddit in Chrome, then select **Replace Comments** or **Delete Posts** in the extension popup.
 
-**Pro is not yet available.** Pricing and availability will be announced closer to release.
+To update an unpacked installation, replace the extracted files and use **Reload** on the extension card. If you remove and reinstall the extension instead, **Chrome may delete its local storage**, including saved replacement history and selections. Keep the same extension installation when possible.
 
-## Installation
+## Replace comments
 
-RedditClean is currently available as a Chrome extension that can be installed manually.
+1. Sign in to Reddit and select **Replace Comments** from the RedditClean toolbar popup.
+2. Wait for the **Filters & preview** workspace to load discovered comments.
+3. Optionally set subreddit, text, or date filters in the left sidebar, then click **Apply filters**. Use **Clear filters** to return to the unfiltered view.
+4. Review the matching comments. Uncheck anything you want to preserve, or use **Select all** / **Preserve all** for matching items.
+5. Click **Export CSV backup** if you want a local record of discovered content.
+6. Select **Replace Comments**, review the confirmation, and start the job.
+7. Watch green completed rows appear at the top. Use **Pause**, **Resume**, or **Stop** as needed. **Done** only closes the workspace; it does not stop a running job.
 
-1. Download the latest ZIP file from this repository's **Releases** section.
-2. Extract the ZIP file.
-3. Open Chrome and go to `chrome://extensions`.
-4. Enable **Developer mode**.
-5. Click **Load unpacked**.
-6. Select the extracted RedditClean folder containing `manifest.json`.
+The free version replaces comment content with:
 
-You can pin RedditClean to your Chrome toolbar for easy access.
+```markdown
+Deleted by [RedditClean](https://github.com/DamnYouRohan/RedditClean)
+```
 
-## How to Use
+This is an edit, **not a permanent comment deletion**. The original text may remain available through caches, archives, search engines, or third-party services.
 
-### Clean Comments
+## Delete posts
 
-1. Log in to Reddit in Chrome.
-2. Open RedditClean and select **Delete Comments**.
-3. Wait for RedditClean to scan your comment history.
-4. Use **Filters & Preview** to review your comments.
-5. Select the comments you want to clean.
-6. Export a CSV backup if required.
-7. Start cleaning.
+1. Select **Delete Posts** in the popup.
+2. Review discovered posts and choose which ones to delete.
+3. Export a backup if needed and confirm the action.
+4. Monitor the result. Stop if Reddit reports an error or the outcome is uncertain.
 
-The free version replaces comments with a standard message. It does not permanently delete them.
+**Deleting posts can be irreversible.** The free allowance is five deletion **attempts** per UTC day, not five guaranteed successful deletions.
 
-### Delete Posts
+## Privacy and permissions
 
-1. Open RedditClean and select **Delete Posts**.
-2. Wait for the scan to complete.
-3. Preview the posts and select those you want to remove.
-4. Confirm your selection.
-5. Monitor progress.
+RedditClean operates using your existing Reddit session and stores selections, job state, allowances, and replacement history locally in Chrome. CSV exports are generated locally. It does not ask for your Reddit password or require Reddit API credentials.
 
-**Post deletion is irreversible.** Review your selections before proceeding.
+The extension requests `storage` and `activeTab` permissions and access to `https://old.reddit.com/*` so it can read your visible Reddit history and interact with Reddit's editing and deletion controls. Do not share exported CSV files or diagnostic screenshots if they contain sensitive information.
 
-## Privacy
+## Known limitations
 
-RedditClean is designed to work locally in your browser.
+- **Beta / live-site dependency:** Reddit interface changes, network problems, and rate limits can disrupt scanning, editing, verification, or deletion. A successful syntax check is not proof of correct live behaviour.
+- **History completeness:** Reddit may not expose all historical items through profile pages. A scan is not a guarantee of complete account history.
+- **Preview accuracy:** Some comment bodies may be unavailable or incorrectly extracted from Reddit's HTML. Try **Rescan** when no job is active, and confirm the content before replacing anything.
+- **Local state:** Removing the extension or clearing its storage can erase saved session/history information. The daily allowance is browser-local, not an account-wide service.
+- **Irreversibility:** Post deletion and overwriting comment text may be impossible to undo. CSV export provides a reference copy, not automatic restoration.
+- **Pro is not implemented:** Permanent comment deletion, randomisation, and Pro licensing are future plans, not current features.
 
-- Uses your existing Reddit session.
-- Does not require your Reddit password.
-- Does not require a separate RedditClean account for the free version.
-- Generates CSV exports locally.
-- Does not require uploading your Reddit history to an external processing service.
+## Reporting a problem
 
-RedditClean is designed to minimise the information it needs to operate.
+Open an issue in the project repository and include the RedditClean version, Chrome version, steps to reproduce, expected behaviour, and actual behaviour. Remove private information from screenshots and logs. For safety, test fixes with a small selection before running larger batches.
 
-## Limitations
+## Project and disclaimer
 
-**Reddit rate limits**
+Source and issue tracker: [RedditClean on GitHub](https://github.com/DamnYouRohan/RedditClean).
 
-Reddit may temporarily restrict editing or deleting content. RedditClean does not bypass these restrictions.
-
-**Historical content**
-
-RedditClean scans content available through your Reddit profile. Some older comments and posts may not be accessible, so a complete history cannot be guaranteed.
-
-**Comment replacement**
-
-Replacing a comment does not guarantee that the original content has been removed from search engines, archives or third-party services.
-
-**Beta software**
-
-RedditClean is still being developed and tested. Reddit interface changes may affect functionality.
-
-We recommend testing with a small number of items before running larger operations.
-
-## Roadmap
-
-We're continuing to improve RedditClean, with a focus on reliability and ease of use.
-
-Planned improvements include:
-
-- More reliable deletion verification and error handling.
-- Improved progress tracking and reporting.
-- Additional filtering options.
-- Permanent comment deletion.
-- Comment randomisation before deletion.
-- Pro licensing and activation.
-- Performance improvements.
-
-## Feedback and Issues
-
-If you encounter a problem or have a suggestion, please open an issue in this repository.
-
-Include the RedditClean version, Chrome version and a description of the issue. Screenshots are helpful, but please remove personal information before uploading them.
-
-## Disclaimer
-
-RedditClean is an independent project and is not affiliated with, endorsed by or sponsored by Reddit.
-
-Editing and deleting Reddit content can be irreversible. Please review your selections and use the extension at your own risk.
+RedditClean is an independent project and is **not affiliated with, endorsed by, or sponsored by Reddit**. Use it only for content you are authorised to manage. Review selections carefully and use at your own risk.
 
 ---
 
